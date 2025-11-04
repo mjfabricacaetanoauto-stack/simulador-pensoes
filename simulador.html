@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador Fundo Pensões Salvador Caetano</title>
+    <style>
+        :root {
+            --brand: #179AD7;
+            --brand-dark: #0f6f98;
+            --brand-light: #c8eefc;
+            --accent-text: #08364a;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        /* logotipo acima do título */
+        .logo-wrapper { display: flex; justify-content: center; margin-bottom: 12px; }
+        #logo { width: 100%; max-width: 300px; height: auto; object-fit: contain; display: block; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            /* novo gradient com o azul do logo */
+            background: linear-gradient(135deg, var(--brand-light) 0%, var(--brand) 45%, var(--brand-dark) 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: var(--accent-text);
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(7,54,74,0.12);
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        h1 { color: var(--accent-text); margin-bottom: 10px; font-size: 28px; text-align: center; }
+        .subtitle { color: #556b75; text-align: center; margin-bottom: 30px; font-size: 14px; }
+
+        .input-group { margin-bottom: 30px; }
+        label { display: block; color: #334a52; font-weight: 600; margin-bottom: 10px; font-size: 16px; }
+        .input-wrapper { position: relative; }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 15px 45px 15px 15px;
+            border: 2px solid #e6eef6;
+            border-radius: 10px;
+            font-size: 18px;
+            transition: all 0.3s;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: var(--brand);
+            box-shadow: 0 0 0 6px rgba(23,154,215,0.08);
+        }
+
+        .currency {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #7b8f96;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .btn-calculate {
+            width: 100%;
+            padding: 18px;
+            /* botão com gradient usando cor do logo */
+            background: linear-gradient(135deg, var(--brand) 0%, var(--brand-dark) 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-bottom: 30px;
+        }
+
+        .btn-calculate:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(23,154,215,0.25); }
+        .btn-calculate:active { transform: translateY(0); }
+
+        .results { display: none; background: #f8fbfe; border-radius: 15px; padding: 25px; }
+        .results.show { display: block; animation: slideIn 0.4s ease-out; }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .result-title { color: var(--accent-text); font-size: 20px; font-weight: 700; margin-bottom: 20px; text-align: center; padding-bottom: 15px; border-bottom: 2px solid var(--brand); }
+        .result-row { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid #e6eef6; }
+        .result-row:last-child { border-bottom: none; }
+        .annual-detail { padding: 5px 0 15px 0; border-bottom: none; opacity: 0.85; }
+
+        .result-label-small { color: #9fbfd3; font-size: 13px; font-style: italic; padding-left: 25px; }
+        .result-value-small { font-size: 14px; font-weight: 600; color: #7faecd; }
+
+        .result-label { color: #556b75; font-size: 15px; flex: 1; }
+        .result-value { font-size: 18px; font-weight: 700; color: var(--accent-text); text-align: right; }
+
+        .highlight {
+            background: linear-gradient(135deg, var(--brand) 0%, var(--brand-dark) 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .highlight .result-label, .highlight .result-value { color: white; }
+        .highlight .result-value { font-size: 24px; }
+
+        .info-box { background: linear-gradient(90deg, rgba(23,154,215,0.08), rgba(15,111,152,0.04)); border-left: 4px solid var(--brand); padding: 15px; margin-top: 20px; border-radius: 5px; font-size: 14px; color: #0b536c; }
+
+        .reset-btn {
+            width: 100%;
+            padding: 12px;
+            background: #f5f5f5;
+            color: #666;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.2s;
+        }
+        .reset-btn:hover { background: #eeeeee; border-color: #999; }
+
+        @media (max-width: 600px) {
+            .container { padding: 25px; }
+            h1 { font-size: 24px; }
+            .result-value { font-size: 16px; }
+            .highlight .result-value { font-size: 20px; }
+            #logo { max-width: 220px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo-wrapper">
+            <!-- renomeia o ficheiro para evitar espaços -->
+            <img id="logo" src="logo-caetano.png" alt="Caetano Auto Logo">
+        </div>
+
+        <h1>Simulador Fundo Pensões Salvador Caetano</h1>
+        <p class="subtitle">Maximize a contribuição da empresa (1,5% do vencimento base anual)</p>
+
+        <div class="input-group">
+            <label for="salary">Vencimento Base Mensal</label>
+            <div class="input-wrapper">
+                <input type="number" id="salary" placeholder="Ex: 1000" step="0.01" min="0">
+                <span class="currency">€</span>
+            </div>
+        </div>
+
+        <button id="calculateBtn" class="btn-calculate" type="button" onclick="calculate()">Calcular Contribuição Ideal</button>
+
+        <div class="results" id="results">
+            <div class="result-title">📊 Resultado da Simulação</div>
+
+            <div class="result-row">
+                <span class="result-label">VB Anual (14 meses)</span>
+                <span class="result-value" id="vbAnual">-</span>
+            </div>
+
+            <div class="result-row">
+                <span class="result-label">Limite máximo empresa (1,5% do VB anual)</span>
+                <span class="result-value" id="maxEmpresa">-</span>
+            </div>
+
+            <div class="highlight">
+                <div class="result-row">
+                    <span class="result-label">💰 A tua contribuição voluntária (mensal)</span>
+                    <span class="result-value" id="mensalColaborador">-</span>
+                </div>
+                <div class="result-row annual-detail">
+                    <span class="result-label-small">Anual:</span>
+                    <span class="result-value-small" id="anualColaborador">-</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">🏢 O acréscimo da empresa (mensal)</span>
+                    <span class="result-value" id="mensalEmpresa">-</span>
+                </div>
+                <div class="result-row annual-detail">
+                    <span class="result-label-small">Anual:</span>
+                    <span class="result-value-small" id="anualEmpresa">-</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">🎯 Total investido (mensal)</span>
+                    <span class="result-value" id="totalMensal">-</span>
+                </div>
+                <div class="result-row annual-detail">
+                    <span class="result-label-small">Anual:</span>
+                    <span class="result-value-small" id="totalAnual">-</span>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <strong>💡 Como funciona:</strong><br>
+                O GSC contribui <strong>50% das tuas contribuições voluntárias</strong>, até ao limite de <strong>1,5% do teu VB anual</strong>. Para maximizar o retorno da empresa, contribua o valor indicado acima mensalmente.
+            </div>
+
+            <button id="resetBtn" class="reset-btn" type="button" onclick="resetSimulator()">🔄 Nova Simulação</button>
+        </div>
+    </div>
+
+    <script src="simulator.js"></script>
+</body>
+</html>
