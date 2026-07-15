@@ -165,3 +165,61 @@
         </div>
 
         <button id="calculateBtn" class="btn-calculate" type="button" onclick="calculate()">Calcular Contribuição Ideal</button>
+
+        <p class="subtitle footnote">
+    *Deves considerar apenas o vencimento bruto
+</p>
+
+
+        <div class="results" id="results">
+            <div class="result-title">📊 Resultado da Simulação</div>
+
+            <div class="result-row">
+                <span class="result-label">VB Anual (14 meses)</span>
+                <span class="result-value" id="vbAnual">-</span>
+            </div>
+
+            <div class="result-row">
+                <span class="result-label">Limite máximo empresa (1,5% do VB anual)</span>
+                <span class="result-value" id="maxEmpresa">-</span>
+            </div>
+
+            <div class="highlight">
+                <div class="result-row">
+                    <span class="result-label">💰 A tua contribuição voluntária (mensal)</span>
+                    <span class="result-value" id="mensalColaborador">-</span>
+                </div>
+                <div class="result-row annual-detail">
+                    <span class="result-label-small">Anual:</span>
+                    <span class="result-value-small" id="anualColaborador">-</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">🏢 O acréscimo da empresa (mensal)</span>
+                    <span class="result-value" id="mensalEmpresa">-</span>
+                </div>
+                <div class="result-row annual-detail">
+                    <span class="result-label-small">Anual:</span>
+                    <span class="result-value-small" id="anualEmpresa">-</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">🎯 Total investido (mensal)</span>
+                    <span class="result-value" id="totalMensal">-</span>
+                </div>
+                <div class="result-row annual-detail">
+                    <span class="result-label-small">Anual:</span>
+                    <span class="result-value-small" id="totalAnual">-</span>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <strong>💡 Como funciona:</strong><br>
+                O GSC contribui <strong>50% das tuas contribuições voluntárias</strong>, até ao limite de <strong>1,5% do teu VB anual</strong>. Para maximizar o retorno da empresa, contribua o valor indicado acima mensalmente.
+            </div>
+
+            <button id="resetBtn" class="reset-btn" type="button" onclick="resetSimulator()">🔄 Nova Simulação</button>
+        </div>
+    </div>
+
+    <script src="simulator.js"></script>
+</body>
+</html>
